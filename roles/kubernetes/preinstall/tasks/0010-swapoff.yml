@@ -4,10 +4,10 @@
     name: "{{ item }}"
     fstype: swap
     state: absent
+  check_mode: no
   with_items:
     - swap
     - none
-  when: not check_mode
 
 # kubelet fails even if ansible_swaptotal_mb = 0
 - name: check swap
