@@ -13,6 +13,7 @@
 - name: check swap
   command: /sbin/swapon -s
   register: swapon
+  check_mode: no
   changed_when: no
 
 - name: Disable swap
@@ -20,10 +21,12 @@
   when:
     - swapon.stdout
     - kubelet_fail_swap_on | default(True)
+  check_mode: no
   ignore_errors: "{{ ansible_check_mode }}"  # noqa ignore-errors
 
 - name: Disable swapOnZram for Fedora
   command: touch /etc/systemd/zram-generator.conf
+  check_mode: no
   when:
     - swapon.stdout
     - ansible_distribution in ['Fedora']
