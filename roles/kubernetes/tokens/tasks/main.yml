@@ -12,6 +12,7 @@
     state: directory
     mode: o-rwx
     group: "{{ kube_cert_group }}"
+  check_mode: no
 
 - import_tasks: gen_tokens.yml
   tags:
