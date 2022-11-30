@@ -18,6 +18,7 @@
       mode: 0755
       state: directory
       recurse: yes
+      check_mode: no
 
   - name: download_file | Create local cache directory
     file:
