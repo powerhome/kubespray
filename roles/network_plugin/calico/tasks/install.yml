@@ -91,7 +91,7 @@
   register: calico_conf
   retries: 4
   until: calico_conf.rc == 0
-  check_node: no
+  check_mode: no
   delay: "{{ retry_stagger | random + 3 }}"
   changed_when: false
   when:
