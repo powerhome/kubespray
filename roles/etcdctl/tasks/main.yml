@@ -20,6 +20,8 @@
     register: etcdctl_version
     check_mode: no
     changed_when: false
+    environment:
+      ETCDCTL_API: "3"
 
   - name: Remove old binary if version is not OK
     file:
