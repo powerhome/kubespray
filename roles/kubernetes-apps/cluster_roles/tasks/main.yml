@@ -9,6 +9,7 @@
   until: result.status == 200
   retries: 10
   delay: 6
+  check_mode: no
   when: inventory_hostname == groups['kube_control_plane'][0]
 
 - name: Kubernetes Apps | Check AppArmor status
@@ -18,6 +19,7 @@
     - podsecuritypolicy_enabled
     - inventory_hostname == groups['kube_control_plane'][0]
   failed_when: false
+  check_node: no
 
 - name: Kubernetes Apps | Set apparmor_enabled
   set_fact:
