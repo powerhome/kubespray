@@ -3,6 +3,7 @@
   command: "openssl x509 -in {{ kube_cert_dir }}/apiserver-etcd-client.crt -noout -serial"
   register: "etcd_client_cert_serial_result"
   changed_when: false
+  check_mode: no
   tags:
     - network
 
