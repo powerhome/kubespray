@@ -3,6 +3,7 @@
   command: which apparmor_parser
   register: apparmor_status
   failed_when: false
+  check_mode: no
   changed_when: apparmor_status.rc != 0
 
 - name: Set apparmor_enabled
