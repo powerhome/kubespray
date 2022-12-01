@@ -19,7 +19,7 @@
     - podsecuritypolicy_enabled
     - inventory_hostname == groups['kube_control_plane'][0]
   failed_when: false
-  check_node: no
+  check_mode: no
 
 - name: Kubernetes Apps | Set apparmor_enabled
   set_fact:
