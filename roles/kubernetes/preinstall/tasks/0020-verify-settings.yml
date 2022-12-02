@@ -188,8 +188,6 @@
     executable: /bin/bash
   register: calico_version_on_server
   delegate_to: "{{ groups['kube_control_plane'][0] }}"
-  async: 10
-  poll: 3
   run_once: yes
   changed_when: false
   failed_when: false
