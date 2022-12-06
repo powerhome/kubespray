@@ -6,12 +6,16 @@ authentication:
   anonymous:
     enabled: false
   webhook:
+    cacheTTL: {{ kubelet_authentication_token_webhook_cache_ttl }}
     enabled: {{ kubelet_authentication_token_webhook }}
   x509:
     clientCAFile: {{ kube_cert_dir }}/ca.crt
 authorization:
 {% if kubelet_authorization_mode_webhook %}
   mode: Webhook
+  webhook:
+    cacheAuthorizedTTL: {{ kubelet_authorization_mode_webhook_cache_authorized_ttl }}
+    cacheUnauthorizedTTL: {{ kubelet_authorization_mode_webhook_cache_unauthorized_ttl }}
 {% else %}
   mode: AlwaysAllow
 {% endif %}
