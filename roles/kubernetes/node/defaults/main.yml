@@ -18,6 +18,11 @@ kubelet_enforce_node_allocatable: "\"\""
 kubelet_runtime_cgroups: "/systemd/system.slice"
 kubelet_kubelet_cgroups: "/systemd/system.slice"
 
+# Webhook auth cache parameters
+kubelet_authentication_token_webhook_cache_ttl: 2m0s
+kubelet_authorization_mode_webhook_cache_authorized_ttl: 5m0s
+kubelet_authorization_mode_webhook_cache_unauthorized_ttl: 30s
+
 # Set runtime and kubelet cgroups when using cgroupfs as cgroup driver
 kubelet_runtime_cgroups_cgroupfs: "/system.slice/containerd.service"
 kubelet_kubelet_cgroups_cgroupfs: "/system.slice/kubelet.slice"
