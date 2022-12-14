@@ -57,7 +57,6 @@
   shell: "set -o pipefail && echo '{{ tokens_data.stdout|quote }}' | base64 -d | tar xz -C /"
   args:
     executable: /bin/bash
-  ignore_errors: '{{ ansible_check_mode }}'
   when:
     - inventory_hostname in groups['kube_control_plane']
     - sync_tokens|default(false)
