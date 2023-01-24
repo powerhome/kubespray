@@ -6,7 +6,7 @@
 
 - name: Ensure version of containerd.io package
   ansible.builtin.apt:
-    name: "containerd.io={{ containerd_versioned_pkg[docker_containerd_version | string] }}"
+    name: "{{ containerd_versioned_pkg[docker_containerd_version | string] }}"
     update_cache: yes
     state: present
 
