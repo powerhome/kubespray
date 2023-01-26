@@ -110,7 +110,6 @@
   gather_facts: False
   hosts: kube_control_plane[0]
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
-  environment: "{{ proxy_disable_env }}"
   tags:
     - workaround
   tasks:
