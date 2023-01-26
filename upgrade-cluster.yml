@@ -117,7 +117,7 @@
       namespace: "kube-system"
       kubectl: "{{ bin_dir }}/kubectl"
       resource: "configmap"
-      filename: "/etc/kubernetes/coredns-cm.yml"
+      filename: "/etc/kubernetes/coredns-config.yml"
       state: "latest"
 
 - name: Upgrade calico and external cloud provider on all masters, calico-rrs, and nodes
