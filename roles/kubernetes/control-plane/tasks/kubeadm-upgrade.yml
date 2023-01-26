@@ -9,6 +9,14 @@
   delay: 5
   until: _result.status == 200
 
+- name: Kubernetes Apps | Delete CoreDNS config map
+  kube:
+    name: "coredns"
+    namespace: "kube-system"
+    kubectl: "{{ bin_dir }}/kubectl"
+    resource: "configmap"
+    state: absent
+
 - name: kubeadm | Upgrade first master
   command: >-
     timeout -k 600s 600s
