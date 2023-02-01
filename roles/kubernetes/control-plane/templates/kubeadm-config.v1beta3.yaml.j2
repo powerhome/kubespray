@@ -294,7 +294,6 @@ controllerManager:
     profiling: "{{ kube_profiling }}"
     terminated-pod-gc-threshold: "{{ kube_controller_terminated_pod_gc_threshold }}"
     bind-address: {{ kube_controller_manager_bind_address }}
-    port: {{ kube_controller_manager_port|default('0') }}
     leader-elect-lease-duration: {{ kube_controller_manager_leader_elect_lease_duration }}
     leader-elect-renew-deadline: {{ kube_controller_manager_leader_elect_renew_deadline }}
 {% if kube_controller_feature_gates or kube_feature_gates %}
