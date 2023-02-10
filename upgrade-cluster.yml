@@ -54,7 +54,7 @@
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
-  serial: "{{ serial | default('20%') }}"
+  serial: 1
   roles:
     - { role: kubespray-defaults }
     - { role: container-engine, tags: "container-engine", when: deploy_container_engine }
@@ -124,7 +124,7 @@
   hosts: kube_control_plane:calico_rr:kube_node
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
-  serial: "{{ serial | default('20%') }}"
+  serial: 1
   environment: "{{ proxy_disable_env }}"
   roles:
     - { role: kubespray-defaults }
@@ -138,7 +138,7 @@
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
-  serial: "{{ serial | default('20%') }}"
+  serial: 1
   roles:
     - { role: kubespray-defaults }
     - { role: upgrade/pre-upgrade, tags: pre-upgrade }
