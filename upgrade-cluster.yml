@@ -1,4 +1,3 @@
----
 - name: Check ansible version
   import_playbook: ansible_version.yml
 
