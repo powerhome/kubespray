@@ -133,49 +133,49 @@
 #     - { role: kubernetes-apps/network_plugin, tags: network }
 #     - { role: kubernetes-apps/policy_controller, tags: policy-controller }
 
-- name: Finally handle worker upgrades, based on given batch size
-  hosts: kube_node:calico_rr:!kube_control_plane
+# - name: Finally handle worker upgrades, based on given batch size
+#   hosts: kube_node:calico_rr:!kube_control_plane
+#   gather_facts: False
+#   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
+#   environment: "{{ proxy_disable_env }}"
+#   serial: 2
+#   roles:
+#     - { role: kubespray-defaults }
+#     - { role: upgrade/pre-upgrade, tags: pre-upgrade }
+#     - { role: container-engine, tags: "container-engine", when: deploy_container_engine }
+#     - { role: kubernetes/node, tags: node }
+#     - { role: kubernetes/kubeadm, tags: kubeadm }
+#     - { role: kubernetes/node-label, tags: node-label }
+#     - { role: upgrade/post-upgrade, tags: post-upgrade }
+
+- hosts: kube_control_plane[0]
+  gather_facts: False
+  any_errors_fatal: true
+  environment: "{{ proxy_disable_env }}"
+  roles:
+    - { role: kubespray-defaults }
+    - { role: win_nodes/kubernetes_patch, tags: ["master", "win_nodes"] }
+
+- hosts: calico_rr
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
-  serial: 2
   roles:
     - { role: kubespray-defaults }
-    - { role: upgrade/pre-upgrade, tags: pre-upgrade }
-    - { role: container-engine, tags: "container-engine", when: deploy_container_engine }
-    - { role: kubernetes/node, tags: node }
-    - { role: kubernetes/kubeadm, tags: kubeadm }
-    - { role: kubernetes/node-label, tags: node-label }
-    - { role: upgrade/post-upgrade, tags: post-upgrade }
+    - { role: network_plugin/calico/rr, tags: network }
 
-# - hosts: kube_control_plane[0]
-#   gather_facts: False
-#   any_errors_fatal: true
-#   environment: "{{ proxy_disable_env }}"
-#   roles:
-#     - { role: kubespray-defaults }
-#     - { role: win_nodes/kubernetes_patch, tags: ["master", "win_nodes"] }
+- hosts: kube_control_plane
+  gather_facts: False
+  any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
+  environment: "{{ proxy_disable_env }}"
+  roles:
+    - { role: kubespray-defaults }
+    - { role: kubernetes-apps, tags: apps }
 
-# - hosts: calico_rr
-#   gather_facts: False
-#   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
-#   environment: "{{ proxy_disable_env }}"
-#   roles:
-#     - { role: kubespray-defaults }
-#     - { role: network_plugin/calico/rr, tags: network }
-
-# - hosts: kube_control_plane
-#   gather_facts: False
-#   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
-#   environment: "{{ proxy_disable_env }}"
-#   roles:
-#     - { role: kubespray-defaults }
-#     - { role: kubernetes-apps, tags: apps }
-
-# - hosts: k8s_cluster
-#   gather_facts: False
-#   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
-#   environment: "{{ proxy_disable_env }}"
-#   roles:
-#     - { role: kubespray-defaults }
-#     - { role: kubernetes/preinstall, when: "dns_mode != 'none' and resolvconf_mode == 'host_resolvconf'", tags: resolvconf }
+- hosts: k8s_cluster
+  gather_facts: False
+  any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
+  environment: "{{ proxy_disable_env }}"
+  roles:
+    - { role: kubespray-defaults }
+    - { role: kubernetes/preinstall, when: "dns_mode != 'none' and resolvconf_mode == 'host_resolvconf'", tags: resolvconf }
