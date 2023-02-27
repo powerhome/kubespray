@@ -1,15 +1,11 @@
 ---
 - name: Check ansible version
-  import_playbook: ./powerhome/kubespray/ansible_version.yml
+  import_playbook: ansible_version.yml
 
 - name: Ensure compatibility with old groups
-  import_playbook: ./powerhome/kubespray/legacy_groups.yml
+  import_playbook: legacy_groups.yml
 
 - hosts: bastion[0]
-  pre_tasks:
-  - include_vars:
-      dir: vars/kubespray
-    tags: always
   gather_facts: False
   environment: "{{ proxy_disable_env }}"
   roles:
@@ -17,10 +13,6 @@
     - { role: bastion-ssh-config, tags: ["localhost", "bastion"] }
 
 - hosts: k8s_cluster:etcd:calico_rr
-  pre_tasks:
-  - include_vars:
-      dir: vars/kubespray
-    tags: always
   strategy: linear
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   gather_facts: false
@@ -35,14 +27,10 @@
 
 - name: Gather facts
   tags: always
-  import_playbook: ./powerhome/kubespray/facts.yml
+  import_playbook: facts.yml
 
 - name: Download images to ansible host cache via first kube_control_plane node
   hosts: kube_control_plane[0]
-  pre_tasks:
-  - include_vars:
-      dir: vars/kubespray
-    tags: always
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
@@ -53,15 +41,9 @@
 
 - name: Prepare nodes for upgrade
   hosts: k8s_cluster:etcd:calico_rr
-
-  pre_tasks:
-  - include_vars:
-      dir: vars/kubespray
-    tags: always
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
-  serial: 1
   roles:
     - { role: kubespray-defaults }
     - { role: kubernetes/preinstall, tags: preinstall }
@@ -69,11 +51,6 @@
 
 - name: Upgrade container engine on non-cluster nodes
   hosts: etcd:calico_rr:!k8s_cluster
-
-  pre_tasks:
-  - include_vars:
-      dir: vars/kubespray
-    tags: always
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
@@ -83,11 +60,6 @@
     - { role: container-engine, tags: "container-engine", when: deploy_container_engine }
 
 - hosts: etcd
-
-  pre_tasks:
-  - include_vars:
-      dir: vars/kubespray
-    tags: always
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
@@ -101,11 +73,6 @@
       when: not etcd_kubeadm_enabled | default(false)
 
 - hosts: k8s_cluster
-
-  pre_tasks:
-  - include_vars:
-      dir: vars/kubespray
-    tags: always
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
@@ -121,11 +88,6 @@
 - name: Handle upgrades to master components first to maintain backwards compat.
   gather_facts: False
   hosts: kube_control_plane
-
-  pre_tasks:
-  - include_vars:
-      dir: vars/kubespray
-    tags: always
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
   serial: 1
@@ -140,20 +102,10 @@
     - { role: kubernetes-apps/cluster_roles, tags: cluster-roles }
     - { role: kubernetes-apps, tags: csi-driver }
     - { role: upgrade/post-upgrade, tags: post-upgrade }
-  tasks:
-    - name: Reboot and check if node is ready
-      include: tasks/trigger-restart.yaml
-      tags:
-      - check-node-is-ready
 
 - name: Workaround | Add back the coredns configmap
   gather_facts: False
   hosts: kube_control_plane[0]
-
-  pre_tasks:
-  - include_vars:
-      dir: vars/kubespray
-    tags: always
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   tags:
     - workaround
@@ -170,11 +122,6 @@
 
 - name: Upgrade calico and external cloud provider on all masters, calico-rrs, and nodes
   hosts: kube_control_plane:calico_rr:kube_node
-
-  pre_tasks:
-  - include_vars:
-      dir: vars/kubespray
-    tags: always
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   serial: 1
@@ -188,15 +135,10 @@
 
 - name: Finally handle worker upgrades, based on given batch size
   hosts: kube_node:calico_rr:!kube_control_plane
-
-  pre_tasks:
-  - include_vars:
-      dir: vars/kubespray
-    tags: always
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
-  serial: "{{ serial_value | default(1) }}"
+  serial: 1
   roles:
     - { role: kubespray-defaults }
     - { role: upgrade/pre-upgrade, tags: pre-upgrade }
@@ -205,18 +147,8 @@
     - { role: kubernetes/kubeadm, tags: kubeadm }
     - { role: kubernetes/node-label, tags: node-label }
     - { role: upgrade/post-upgrade, tags: post-upgrade }
-  tasks:
-    - name: Reboot and check if node is ready
-      include: tasks/trigger-restart.yaml
-      tags:
-      - check-node-is-ready
 
 - hosts: kube_control_plane[0]
-
-  pre_tasks:
-  - include_vars:
-      dir: vars/kubespray
-    tags: always
   gather_facts: False
   any_errors_fatal: true
   environment: "{{ proxy_disable_env }}"
@@ -225,11 +157,6 @@
     - { role: win_nodes/kubernetes_patch, tags: ["master", "win_nodes"] }
 
 - hosts: calico_rr
-
-  pre_tasks:
-  - include_vars:
-      dir: vars/kubespray
-    tags: always
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
@@ -238,11 +165,6 @@
     - { role: network_plugin/calico/rr, tags: network }
 
 - hosts: kube_control_plane
-
-  pre_tasks:
-  - include_vars:
-      dir: vars/kubespray
-    tags: always
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
@@ -251,27 +173,9 @@
     - { role: kubernetes-apps, tags: apps }
 
 - hosts: k8s_cluster
-
-  pre_tasks:
-  - include_vars:
-      dir: vars/kubespray
-    tags: always
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
   roles:
     - { role: kubespray-defaults }
     - { role: kubernetes/preinstall, when: "dns_mode != 'none' and resolvconf_mode == 'host_resolvconf'", tags: resolvconf }
-
-- name: Configure BGP Peering
-  hosts: kube_control_plane[0]
-  gather_facts: False
-  tags: bgp_peering
-  tasks:
-  - include_vars:
-      dir: vars/kubespray
-    tags: always
-
-  - ansible.builtin.include_tasks:
-      file: tasks/config-bgp-peering.yaml
-
