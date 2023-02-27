@@ -138,7 +138,7 @@
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
-  serial: 2
+  serial: 1
   roles:
     - { role: kubespray-defaults }
     - { role: upgrade/pre-upgrade, tags: pre-upgrade }
@@ -170,15 +170,12 @@
   environment: "{{ proxy_disable_env }}"
   roles:
     - { role: kubespray-defaults }
-    - { role: kubernetes-apps/ingress_controller, tags: ingress-controller }
-    - { role: kubernetes-apps/external_provisioner, tags: external-provisioner }
     - { role: kubernetes-apps, tags: apps }
 
-- name: Apply resolv.conf changes now that cluster DNS is up
-  hosts: k8s_cluster
+- hosts: k8s_cluster
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
   roles:
     - { role: kubespray-defaults }
-    - { role: kubernetes/preinstall, when: "dns_mode != 'none' and resolvconf_mode == 'host_resolvconf'", tags: resolvconf, dns_late: true }
+    - { role: kubernetes/preinstall, when: "dns_mode != 'none' and resolvconf_mode == 'host_resolvconf'", tags: resolvconf }
