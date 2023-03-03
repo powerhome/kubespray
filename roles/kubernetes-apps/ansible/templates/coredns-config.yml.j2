@@ -39,16 +39,13 @@ data:
 {% if enable_coredns_reverse_dns_lookups %}
           fallthrough in-addr.arpa ip6.arpa
 {% endif %}
+          ttl 30
         }
         prometheus :9153
 {% if upstream_dns_servers is defined and upstream_dns_servers|length > 0 %}
-        forward . {{ upstream_dns_servers|join(' ') }} {
-          prefer_udp
-        }
+        forward . {{ upstream_dns_servers|join(' ') }}
 {% else %}
-        forward . /etc/resolv.conf {
-          prefer_udp
-        }
+        forward . /etc/resolv.conf
 {% endif %}
 {% if enable_coredns_k8s_external %}
         k8s_external {{ coredns_k8s_external_zone }}
