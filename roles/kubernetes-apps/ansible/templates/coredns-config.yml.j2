@@ -13,11 +13,6 @@ data:
     {{ block['zones'] | join(' ') }} {
         log
         errors
-{% if block['rewrite'] is defined and block['rewrite']|length > 0 %}
-{% for rewrite_match in block['rewrite'] %}
-        rewrite {{ rewrite_match }}
-{% endfor %}
-{% endif %}
         forward . {{ block['nameservers'] | join(' ') }}
         loadbalance
         cache {{ block['cache'] | default(5) }}
@@ -30,12 +25,39 @@ data:
     }
 {%   endfor %}
 {% endif %}
+{% if coredns_federation_zones is defined and coredns_federation_zones|length > 0 %}
+    (fedplugins) {
+        errors
+        log
+        ready
+        cache 30
+        loop
+        reload
+        loadbalance
+    }
+{%   for block in coredns_federation_zones %}
+{% if clusterIP != block['nameserver'] %}
+    {{ block['zone'] }}.:53 {
+        import fedplugins
+        rewrite stop name suffix .{{ block['zone'] }}. .svc.{{ block['suffix'] | default(dns_domain) }}. answer auto
+        forward . {{ block['nameserver'] }}
+    }
+{% endif %}
+{%   endfor %}
+{% endif %}
     .:53 {
         errors
         health {
             lameduck 5s
         }
         ready
+{% if coredns_federation_zones is defined and coredns_federation_zones|length > 0 %}
+{%   for block in coredns_federation_zones %}
+{% if clusterIP == block['nameserver'] %}
+        rewrite stop name suffix .{{ block['zone'] }}. .svc.{{ block['suffix'] | default(dns_domain) }}. answer auto
+{% endif %}
+{%   endfor %}
+{% endif %}
         kubernetes {{ dns_domain }} {% if enable_coredns_reverse_dns_lookups %}in-addr.arpa ip6.arpa {% endif %}{
           pods insecure
 {% if enable_coredns_k8s_endpoint_pod_names %}
@@ -48,19 +70,21 @@ data:
         prometheus :9153
 {% if upstream_dns_servers is defined and upstream_dns_servers|length > 0 %}
         forward . {{ upstream_dns_servers|join(' ') }} {
-          prefer_udp
-          max_concurrent 1000
+{% for dns_opt in upstream_dns_extra_options %}
+          {{ dns_opt }}
+{% endfor %}
         }
 {% else %}
         forward . /etc/resolv.conf {
-          prefer_udp
-          max_concurrent 1000
+{% for dns_opt in upstream_dns_extra_options %}
+          {{ dns_opt }}
+{% endfor %}
         }
 {% endif %}
 {% if enable_coredns_k8s_external %}
         k8s_external {{ coredns_k8s_external_zone }}
 {% endif %}
-        {{ coredns_default_zone_cache_block | indent(width=8, first=False) }}
+        cache 30
         loop
         reload
         loadbalance
