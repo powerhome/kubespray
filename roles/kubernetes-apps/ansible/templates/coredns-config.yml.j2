@@ -44,7 +44,6 @@ data:
 {% if enable_coredns_reverse_dns_lookups %}
           fallthrough in-addr.arpa ip6.arpa
 {% endif %}
-          ttl 30
         }
         prometheus :9153
 {% if upstream_dns_servers is defined and upstream_dns_servers|length > 0 %}
