@@ -5,11 +5,12 @@ name: kubespray
 version: 2.18-power-1
 readme: README.md
 authors:
-  - luksi1
+  - djtaylor
+  - mvbleandro
 tags:
   - kubernetes
   - kubespray
-repository: https://github.com/kubernetes-sigs/kubespray
+repository: https://github.com/powerhome/kubespray
 build_ignore:
   - .github
   - '*.tar.gz'
