@@ -1,4 +1,7 @@
 ---
+collections:
+  - powerhome.kubespray
+
 - name: Kubernetes Apps | Wait for kube-apiserver
   uri:
     url: "{{ kube_apiserver_endpoint }}/healthz"
