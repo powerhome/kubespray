@@ -2,7 +2,7 @@
 namespace: powerhome
 description: Deploy a production ready Kubernetes cluster
 name: kubespray
-version: 2.18.1
+version: release-2.18-power-1
 readme: README.md
 authors:
   - djtaylor
