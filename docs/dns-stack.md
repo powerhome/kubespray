@@ -93,6 +93,22 @@ or as INI
 coredns_external_zones='[{"cache": 30,"zones":["example.com","example.io:453"],"nameservers":["1.1.1.1","2.2.2.2"]}]'
 ```
 
+### coredns_federation_zones
+
+Array of optional federation zones corresponding to other similarly-built
+clusters. The local suffix is replaced by the one specified in the dict entry.
+Notice that you must have your L3 network configured already to route to the
+other cluster(s) for this to work.
+
+Example:
+
+```yaml
+coredns_federation_zones:
+- zone: example.com # required
+  suffix: cluster.local # default value, optional
+  nameserver: 1.2.3.4 # required
+```
+
 ### dns_etchosts (coredns)
 
 Optional hosts file content to coredns use as /etc/hosts file. This will also be used by nodelocaldns, if enabled.
