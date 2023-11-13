@@ -25,12 +25,37 @@ data:
     }
 {%   endfor %}
 {% endif %}
+{% if coredns_federation_zones is defined and coredns_federation_zones|length > 0 %}
+    (fedplugins) {
+        errors
+        log
+        ready
+        cache 30
+        loop
+        reload
+        loadbalance
+    }
+{%   for block in coredns_federation_zones %}
+{% if clusterIP != block['nameserver'] %}
+    {{ block['zone'] }}.:53 {
+        import fedplugins
+        rewrite stop name suffix .{{ block['zone'] }}. .{{ block['suffix'] | default(dns_domain) }}. answer auto
+        forward . {{ block['nameserver'] }}
+    }
+{% endif %}
+{%   endfor %}
+{% endif %}
     .:53 {
         errors
         health {
             lameduck 5s
         }
         ready
+{%   for block in coredns_federation_zones %}
+{% if clusterIP == block['nameserver'] %}
+        rewrite stop name suffix .{{ block['zone'] }}. .{{ block['suffix'] | default(dns_domain) }}. answer auto
+{% endif %}
+{%   endfor %}
         kubernetes {{ dns_domain }} {% if enable_coredns_reverse_dns_lookups %}in-addr.arpa ip6.arpa {% endif %}{
           pods insecure
 {% if enable_coredns_k8s_endpoint_pod_names %}
