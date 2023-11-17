@@ -39,7 +39,7 @@ data:
 {% if clusterIP != block['nameserver'] %}
     {{ block['zone'] }}.:53 {
         import fedplugins
-        rewrite stop name suffix .{{ block['zone'] }}. .{{ block['suffix'] | default(dns_domain) }}. answer auto
+        rewrite stop name suffix .{{ block['zone'] }}. .svc.{{ block['suffix'] | default(dns_domain) }}. answer auto
         forward . {{ block['nameserver'] }}
     }
 {% endif %}
@@ -54,7 +54,7 @@ data:
 {% if coredns_federation_zones is defined and coredns_federation_zones|length > 0 %}
 {%   for block in coredns_federation_zones %}
 {% if clusterIP == block['nameserver'] %}
-        rewrite stop name suffix .{{ block['zone'] }}. .{{ block['suffix'] | default(dns_domain) }}. answer auto
+        rewrite stop name suffix .{{ block['zone'] }}. .svc.{{ block['suffix'] | default(dns_domain) }}. answer auto
 {% endif %}
 {%   endfor %}
 {% endif %}
