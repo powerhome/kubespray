@@ -33,6 +33,10 @@ dns_autoscaler_deployment_nodeselector: "kubernetes.io/os: linux"
 #   app: kube-prometheus-stack-kube-etcd
 #   release: prometheus-stack
 
+# Upstream DNS options
+upstream_dns_extra_options:
+  - 'prefer_udp'
+
 # Netchecker
 deploy_netchecker: false
 netchecker_port: 31081

@@ -79,6 +79,22 @@
     - ansible_distribution != "Fedora"
     - not is_ostree
 
+- name: Unhold containerd.io
+  ansible.builtin.dpkg_selections:
+    name: containerd.io
+    selection: install
+
+- name: Ensure version of containerd.io package
+  ansible.builtin.apt:
+    name: "{{ containerd_versioned_pkg[docker_containerd_version | string] }}"
+    update_cache: yes
+    state: present
+
+- name: Hold containerd.io
+  ansible.builtin.dpkg_selections:
+    name: containerd.io
+    selection: hold
+
 - name: Remove dpkg hold
   dpkg_selections:
     name: "{{ item }}"

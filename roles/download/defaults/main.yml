@@ -131,7 +131,7 @@ kubeadm_download_url: "https://storage.googleapis.com/kubernetes-release/release
 etcd_download_url: "https://github.com/coreos/etcd/releases/download/{{ etcd_version }}/etcd-{{ etcd_version }}-linux-{{ image_arch }}.tar.gz"
 flannel_cni_download_url: "https://github.com/flannel-io/cni-plugin/releases/download/{{ flannel_cni_version }}/flannel-{{ image_arch }}"
 cni_download_url: "https://github.com/containernetworking/plugins/releases/download/{{ cni_version }}/cni-plugins-linux-{{ image_arch }}-{{ cni_version }}.tgz"
-calicoctl_download_url: "https://github.com/projectcalico/calicoctl/releases/download/{{ calico_ctl_version }}/calicoctl-linux-{{ image_arch }}"
+calicoctl_download_url: "https://github.com/projectcalico/calico/releases/download/{{ calico_ctl_version }}/calicoctl-linux-{{ image_arch }}"
 calico_crds_download_url: "https://github.com/projectcalico/calico/archive/{{ calico_version }}.tar.gz"
 crictl_download_url: "https://github.com/kubernetes-sigs/cri-tools/releases/download/{{ crictl_version }}/crictl-{{ crictl_version }}-{{ ansible_system | lower }}-{{ image_arch }}.tar.gz"
 helm_download_url: "https://get.helm.sh/helm-{{ helm_version }}-linux-{{ image_arch }}.tar.gz"
@@ -254,6 +254,7 @@ kubelet_checksums:
     v1.23.2: c3c4be17910935d234b776288461baf7a9c6a7414d1f1ac2ef8d3a1af4e41ab6
     v1.23.1: 7ff47abf62096a41005d18c6d482cf73f26b613854173327fa9f2b98720804d4
     v1.23.0: 4756ff345dd80704b749d87efb8eb294a143a1f4a251ec586197d26ad20ea518
+    v1.22.17: 48d200775000567256a8c114cf4f5d389468b175c3add6b232ec3b26f03e8564
     v1.22.8: 2e6d1774f18c4d4527c3b9197a64ea5705edcf1b547c77b3e683458d771f3ce7
     v1.22.7: cfc96b5f781bfbfdcb05115f4e26a5a6afc9d74bb4a5647c057b2c13086fb24d
     v1.22.6: 7b009835b0ab74aa16ebf57f5179893035e0cf5994e1bcf9b783275921a0393a
@@ -263,6 +264,7 @@ kubelet_checksums:
     v1.22.2: 0fd6572e24e3bebbfd6b2a7cb7adced41dad4a828ef324a83f04b46378a8cb24
     v1.22.1: 2079780ad2ff993affc9b8e1a378bf5ee759bf87fdc446e6a892a0bbd7353683
     v1.22.0: fec5c596f7f815f17f5d7d955e9707df1ef02a2ca5e788b223651f83376feb7f
+    v1.21.14: ca2e5e1f2a05b86e4f758181b172eb12bf99c3cc2a2b5b3e598f4c85d4d27fda
     v1.21.11: ea22e3683016643344c5839a317b5e7b0061fdded321339a6d545766765bb10a
     v1.21.10: 8e0dab1cb93e61771fba594484a37a6079073ed2d707cf300c472e79b2f91bf0
     v1.21.9: 1fa0c296df6af71fca1bdd94f9fb19c7051b4b3f8cf19c353192cb96b413fcf2
@@ -384,6 +386,7 @@ kubectl_checksums:
     v1.23.2: 5b55b58205acbafa7f4e3fc69d9ce5a9257be63455db318e24db4ab5d651cbde
     v1.23.1: 156fd5e7ebbedf3c482fd274089ad75a448b04cf42bc53f370e4e4ea628f705e
     v1.23.0: 2d0f5ba6faa787878b642c151ccb2c3390ce4c1e6c8e2b59568b3869ba407c4f
+    v1.22.17: 7506a0ae7a59b35089853e1da2b0b9ac0258c5309ea3d165c3412904a9051d48
     v1.22.8: 761bf1f648056eeef753f84c8365afe4305795c5f605cd9be6a715483fe7ca6b
     v1.22.7: 4dd14c5b61f112b73a5c9c844011a7887c4ffd6b91167ca76b67197dee54d388
     v1.22.6: 1ab07643807a45e2917072f7ba5f11140b40f19675981b199b810552d6af5c53
@@ -393,6 +396,7 @@ kubectl_checksums:
     v1.22.2: aeca0018958c1cae0bf2f36f566315e52f87bdab38b440df349cd091e9f13f36
     v1.22.1: 78178a8337fc6c76780f60541fca7199f0f1a2e9c41806bded280a4a5ef665c9
     v1.22.0: 703e70d49b82271535bc66bc7bd469a58c11d47f188889bd37101c9772f14fa1
+    v1.21.14: 0c1682493c2abd7bc5fe4ddcdb0b6e5d417aa7e067994ffeca964163a988c6ee
     v1.21.11: 9c45ce24ad412701beeac8d9f0004787209d76dd66390915f38a8682358484cb
     v1.21.10: 24ce60269b1ffe1ca151af8bfd3905c2427ebef620bc9286484121adf29131c0
     v1.21.9: 195d5387f2a6ca7b8ab5c2134b4b6cc27f29372f54b771947ba7c18ee983fbe6
@@ -514,6 +518,7 @@ kubeadm_checksums:
     v1.23.2: 58487391ec37489bb32fe532e367995e9ecaeafdb65c2113ff3675e7a8407219
     v1.23.1: 4d5766cb90050ee84e15df5e09148072da2829492fdb324521c4fa6d74d3aa34
     v1.23.0: e21269a058d4ad421cf5818d4c7825991b8ba51cd06286932a33b21293b071b0
+    v1.22.17: 75244faf5726baf432ff2a76d5f188772173adb5ca1c33634d56ba13dbd6e4dc
     v1.22.8: fc10b4e5b66c9bfa6dc297bbb4a93f58051a6069c969905ef23c19680d8d49dc
     v1.22.7: 7e4be37fc5ddeeae732886bf83c374198813e76d84ed2f6590145e08ece1a8b2
     v1.22.6: 0bf8e47ad91215cd8c5e0ded565645aeb1ad6f0a9223a2486eb913bff929d472
@@ -523,6 +528,7 @@ kubeadm_checksums:
     v1.22.2: 4ff09d3cd2118ee2670bc96ed034620a9a1ea6a69ef38804363d4710a2f90d8c
     v1.22.1: 50a5f0d186d7aefae309539e9cc7d530ef1a9b45ce690801655c2bee722d978c
     v1.22.0: 90a48b92a57ff6aef63ff409e2feda0713ca926b2cd243fe7e88a84c483456cc
+    v1.21.14: 3b1da35298d062540f9ecad0f18cf4e44be0c7d37c5e430ed0cb56d6c0fe5ebc
     v1.21.11: 3514ea5acaae9c2779a341deb24832df17722cb612fa7a78d34f602f91e94d17
     v1.21.10: 61aaadd98806d979b65e031a144d9379390d26ccb5383d47bdd8b7c727e94a7b
     v1.21.9: 3333116f9f0d72e0598f52dcbef7ecab1ce88192fdcfd5384ca919fdc075e8d5
@@ -582,6 +588,9 @@ calicoctl_binary_checksums:
     v3.19.3: 0
     v3.18.6: 0
   amd64:
+    v3.22.5: ba75fa65be0e97555b37282e1ab469ad933866eed164b40513e835279bea7348
+    v3.22.3: a9e5f6bad4ad8c543f6bdcd21d3665cdd23edc780860d8e52a87881a7b3e203c
+    v3.22.0: 5138f6257308071df648cfb5d90201d17704d16767b8db807ed5fdec501559c9
     v3.21.2: d495edfc254e00f008ef6872422a31ef5f442a1ff96bcb724dd2df86ef75b7e3
     v3.20.3: 29bec97b1dfc135b830b0cbfd3dfe216f00e97e9e6ef08e620d81d4a09db6393
     v3.19.3: e9d91036764ec24f32025c3176efb2c2673b9936270e6165fb6583cce97bc43f
@@ -592,6 +601,9 @@ calicoctl_binary_checksums:
     v3.19.3: ec3cfbd2dccbd614ac353be8c9abf8e336d8700fbd2b9b76da1c3c4c14a6dfe2
     v3.18.6: 2990c2004d9b9ab6cfc913fe0ed521c12d7b5a3f3fcf4940549a8a15721e84dd
 calico_crds_archive_checksums:
+  v3.22.5: f3b6a6861b7beae549b4cf0be5c4b954c0cc19e95adb89dd9d78e983f9f2a5d7
+  v3.22.3: 55ece01da00f82c62619b82b6bfd6442a021acc6fd915a753735e6ebceabaa21
+  v3.22.0: 204c12a6394784861b38ad1951ef720f24dff53b5b8c56ced7b701257e4bba2b
   v3.21.2: 6f1342ac8b3d9ebfa9714f06aa92f4f0eea0d2b09d7e77ed73c0c9de0bb0aee8
   v3.20.3: 2a3a5cbe05c60fa2fc850252c4eecfa36dd6629191ed805eea31f9b5c740bc4c
   v3.19.3: 7066d0e6b0136920f82a75a5bd2d595e9f69bd3ab823403e920906569ec6be07
@@ -819,10 +831,10 @@ haproxy_image_tag: 2.4.9
 # Coredns version should be supported by corefile-migration (or at least work with)
 # bundle with kubeadm; if not 'basic' upgrade can sometimes fail
 
-coredns_version: "v1.8.0"
+coredns_version: "v1.10.1"
 coredns_image_is_namespaced: "{{ (kube_version is version('v1.21.0','>=')) or (coredns_version is version('v1.7.1','>=')) }}"
 
-coredns_image_repo: "{{ kube_image_repo }}{{'/coredns/coredns' if (coredns_image_is_namespaced | bool) else '/coredns' }}"
+coredns_image_repo: "docker.io/coredns/coredns" # k8s.gcr.io is deprecated
 coredns_image_tag: "{{ coredns_version if (coredns_image_is_namespaced | bool) else (coredns_version | regex_replace('^v', '')) }}"
 
 nodelocaldns_version: "1.21.1"
@@ -1232,9 +1244,9 @@ downloads:
     url: "{{ calico_crds_download_url }}"
     unarchive: true
     unarchive_extra_opts:
-    - "--strip=6"
+    - "{{ '--strip=6' if (calico_version is version('v3.22.3','<')) else '--strip=3' }}"
     - "--wildcards"
-    - "*/_includes/charts/calico/crds/kdd/"
+    - "{{ '*/_includes/charts/calico/crds/kdd/' if (calico_version is version('v3.22.3','<')) else '*/libcalico-go/config/crd/' }}"
     owner: "root"
     mode: "0755"
     groups:

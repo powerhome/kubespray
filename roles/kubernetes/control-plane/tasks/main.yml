@@ -36,6 +36,8 @@
     dest: "{{ bin_dir }}/kubectl"
     mode: 0755
     remote_src: true
+  when:
+    - not skip_downloads
   tags:
     - kubectl
     - upgrade
