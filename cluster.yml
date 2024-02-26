@@ -6,10 +6,6 @@
   import_playbook: legacy_groups.yml
 
 - hosts: bastion[0]
-  pre_tasks:
-  - include_vars:
-      dir: ../../vars/kubespray
-    tags: always
   gather_facts: False
   environment: "{{ proxy_disable_env }}"
   roles:
@@ -17,10 +13,6 @@
     - { role: bastion-ssh-config, tags: ["localhost", "bastion"] }
 
 - hosts: k8s_cluster:etcd
-  pre_tasks:
-  - include_vars:
-      dir: ../../vars/kubespray
-    tags: always
   strategy: linear
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   gather_facts: false
@@ -34,10 +26,6 @@
   import_playbook: facts.yml
 
 - hosts: k8s_cluster:etcd
-  pre_tasks:
-  - include_vars:
-      dir: ../../vars/kubespray
-    tags: always
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
@@ -48,10 +36,6 @@
     - { role: download, tags: download, when: "not skip_downloads" }
 
 - hosts: etcd
-  pre_tasks:
-  - include_vars:
-      dir: ../../vars/kubespray
-    tags: always
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
@@ -65,10 +49,6 @@
       when: not etcd_kubeadm_enabled| default(false)
 
 - hosts: k8s_cluster
-  pre_tasks:
-  - include_vars:
-      dir: ../../vars/kubespray
-    tags: always
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
@@ -82,10 +62,6 @@
       when: not etcd_kubeadm_enabled| default(false)
 
 - hosts: k8s_cluster
-  pre_tasks:
-  - include_vars:
-      dir: ../../vars/kubespray
-    tags: always
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
@@ -94,10 +70,6 @@
     - { role: kubernetes/node, tags: node }
 
 - hosts: kube_control_plane
-  pre_tasks:
-  - include_vars:
-      dir: ../../vars/kubespray
-    tags: always
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
@@ -108,10 +80,6 @@
     - { role: kubernetes-apps/cluster_roles, tags: cluster-roles }
 
 - hosts: k8s_cluster
-  pre_tasks:
-  - include_vars:
-      dir: ../../vars/kubespray
-    tags: always
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
@@ -122,10 +90,6 @@
     - { role: network_plugin, tags: network }
 
 - hosts: calico_rr
-  pre_tasks:
-  - include_vars:
-      dir: ../../vars/kubespray
-    tags: always
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
@@ -134,10 +98,6 @@
     - { role: network_plugin/calico/rr, tags: ['network', 'calico_rr'] }
 
 - hosts: kube_control_plane[0]
-  pre_tasks:
-  - include_vars:
-      dir: ../../vars/kubespray
-    tags: always
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
@@ -146,10 +106,6 @@
     - { role: win_nodes/kubernetes_patch, tags: ["master", "win_nodes"] }
 
 - hosts: kube_control_plane
-  pre_tasks:
-  - include_vars:
-      dir: ../../vars/kubespray
-    tags: always  
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
@@ -163,10 +119,6 @@
     - { role: kubernetes-apps, tags: apps }
 
 - hosts: k8s_cluster
-  pre_tasks:
-  - include_vars:
-      dir: ../../vars/kubespray
-    tags: always  
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
