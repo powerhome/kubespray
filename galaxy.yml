@@ -2,11 +2,13 @@
 namespace: powerhome
 description: Deploy a production ready Kubernetes cluster
 name: kubespray
-version: 2.18.1
+version: 2.20.0
 readme: README.md
 authors:
   - djtaylor
   - mvbleandro
+  - amurphy
+  - rcrowston
 tags:
   - kubernetes
   - kubespray
