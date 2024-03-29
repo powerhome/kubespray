@@ -79,7 +79,7 @@ runc_version: v1.1.4
 kata_containers_version: 2.4.1
 youki_version: 0.0.1
 gvisor_version: 20210921
-containerd_version: 1.6.8
+containerd_version: 1.6.30
 cri_dockerd_version: 0.2.2
 
 # this is relevant when container_manager == 'docker'
@@ -925,6 +925,8 @@ containerd_archive_checksums:
     1.6.6: 0212869675742081d70600a1afc6cea4388435cc52bf5dc21f4efdcb9a92d2ef
     1.6.7: 52e817b712d521b193773529ff33626f47507973040c02474a2db95a37da1c37
     1.6.8: 3a1322c18ee5ff4b9bd5af6b7b30c923a3eab8af1df05554f530ef8e2b24ac5e
+    1.6.30: 1f1b65190b626883394e6f2ecbe5141afc6c45fc1ca035ef052e66bb2c479a5f
+
   ppc64le:
     1.5.5: 0
     1.5.7: 0
