@@ -12,6 +12,7 @@
 - name: check swap
   command: /sbin/swapon -s
   register: swapon
+  check_mode: no
   changed_when: no
 
 - name: Disable swap

@@ -1,4 +1,3 @@
----
 - name: Check ansible version
   import_playbook: ansible_version.yml
 
@@ -54,7 +53,7 @@
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
-  serial: "{{ serial | default('20%') }}"
+  serial: 1
   roles:
     - { role: kubespray-defaults }
     - { role: container-engine, tags: "container-engine", when: deploy_container_engine }
@@ -106,11 +105,28 @@
     - { role: kubernetes-apps, tags: csi-driver }
     - { role: upgrade/post-upgrade, tags: post-upgrade }
 
+- name: Workaround | Add back the coredns configmap
+  gather_facts: False
+  hosts: kube_control_plane[0]
+  any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
+  tags:
+    - workaround
+  tasks:
+
+  - name: Workaround | Recreate CoreDNS ConfigMap
+    kube:
+      name: "coredns"
+      namespace: "kube-system"
+      kubectl: "{{ bin_dir }}/kubectl"
+      resource: "configmap"
+      filename: "/etc/kubernetes/coredns-config.yml"
+      state: "latest"
+
 - name: Upgrade calico and external cloud provider on all masters, calico-rrs, and nodes
   hosts: kube_control_plane:calico_rr:kube_node
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
-  serial: "{{ serial | default('20%') }}"
+  serial: 1
   environment: "{{ proxy_disable_env }}"
   roles:
     - { role: kubespray-defaults }
@@ -124,7 +140,7 @@
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
-  serial: "{{ serial | default('20%') }}"
+  serial: 1
   roles:
     - { role: kubespray-defaults }
     - { role: upgrade/pre-upgrade, tags: pre-upgrade }

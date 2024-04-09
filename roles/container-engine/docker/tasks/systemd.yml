@@ -1,4 +1,10 @@
 ---
+- name: Remove /etc/docker/daemon.json from legacy installations if present
+  file:
+    path: /etc/docker/daemon.json
+    state: absent
+  notify: restart docker
+
 - name: Create docker service systemd directory if it doesn't exist
   file:
     path: /etc/systemd/system/docker.service.d

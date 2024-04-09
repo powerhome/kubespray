@@ -9,6 +9,7 @@
   until: result.status == 200
   retries: 20
   delay: 1
+  check_mode: no
   when: inventory_hostname == groups['kube_control_plane'][0]
 
 - name: Kubernetes Apps | Cleanup DNS

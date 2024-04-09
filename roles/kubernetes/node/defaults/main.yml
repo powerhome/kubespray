@@ -15,6 +15,11 @@ kubelet_enforce_node_allocatable: "\"\""
 kubelet_runtime_cgroups: "/systemd/system.slice"
 kubelet_kubelet_cgroups: "/systemd/system.slice"
 
+# Webhook auth cache parameters
+kubelet_authentication_token_webhook_cache_ttl: 2m0s
+kubelet_authorization_mode_webhook_cache_authorized_ttl: 5m0s
+kubelet_authorization_mode_webhook_cache_unauthorized_ttl: 30s
+
 # Set runtime and kubelet cgroups when using cgroupfs as cgroup driver
 kubelet_runtime_cgroups_cgroupfs: "/system.slice/containerd.service"
 kubelet_kubelet_cgroups_cgroupfs: "/system.slice/kubelet.service"
@@ -26,7 +31,10 @@ kubelet_fail_swap_on: true
 kubelet_systemd_hardening: false
 
 # List of secure IPs for kubelet
-kubelet_secure_addresses: "{{ groups['kube_control_plane'] | map('extract', hostvars, ['ansible_host']) | join(' ') }}"
+kubelet_secure_addresses: >-
+  {%- for host in groups['kube_control_plane'] -%}
+    {{ hostvars[host]['ip'] | default(fallback_ips[host]) }}{{ ' ' if not loop.last else '' }}
+  {%- endfor -%}
 
 # Reserve this space for kube resources
 kube_memory_reserved: 256Mi
